@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IntegrateISP - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+</head>
+<body>
+    <div id="login-screen" class="flex items-center justify-center h-screen bg-gradient-to-br from-blue-500 to-purple-600">
+        <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-gray-900">IntegrateISP</h1>
+                <p class="mt-2 text-gray-600">Starlink Reseller Management Platform</p>
+            </div>
+            <form class="mt-8 space-y-6" id="login-form">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                    <input id="email" name="email" type="email" autocomplete="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Sign in
+                    </button>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-500">Demo credentials:</p>
+                    <p class="text-xs text-gray-500">Admin: admin@integrate.isp / password</p>
+                    <p class="text-xs text-gray-500">Manager: manager@integrate.isp / password</p>
+                    <p class="text-xs text-gray-500">Employee: employee@integrate.isp / password</p>
+                    <p class="text-xs text-gray-500">Finance: finance@integrate.isp / password</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', path='/js/login.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IntegrateISP - Starlink Reseller Management Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+</head>
+<body>
+    <!-- Main Dashboard -->
+    <div id="dashboard">
+        <!-- Top Navigation -->
+        <nav class="bg-white shadow-sm">
+            <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <span class="navbar-brand text-indigo-600">IntegrateISP</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
+                            <div class="ml-3 relative">
+                                <div class="flex items-center">
+                                    <span id="user-role" class="text-sm font-medium text-gray-500 mr-2"></span>
+                                    <span id="user-name" class="text-sm font-medium text-gray-700 mr-2"></span>
+                                    <button id="logout-button" class="ml-2 px-3 py-1 text-sm text-white bg-red-500 hover:bg-red-600 rounded">
+                                        Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="flex">
+            <!-- Sidebar Navigation -->
+            <div class="sidebar w-64 bg-white shadow-md p-4">
+                <nav class="mt-5 space-y-1">
+                    <a href="#" class="nav-item flex items-center px-4 py-2 text-gray-700 hover:text-indigo-600" data-section="dashboard-home">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        Dashboard
+                    </a>
+                    <a href="#" class="nav-item flex items-center px-4 py-2 text-gray-700 hover:text-indigo-600" data-section="user-management">
+                        <i class="fas fa-users mr-3"></i>
+                        User Management
+                    </a>
+                    <a href="#" class="nav-item flex items-center px-4 py-2 text-gray-700 hover:text-indigo-600" data-section="finance-tracker">
+                        <i class="fas fa-money-bill-wave mr-3"></i>
+                        Finance Tracker
+                    </a>
+                    <a href="#" class="nav-item flex items-center px-4 py-2 text-gray-700 hover:text-indigo-600" data-section="client-management">
+                        <i class="fas fa-building mr-3"></i>
+                        Client Management
+                    </a>
+                    <a href="#" class="nav-item flex items-center px-4 py-2 text-gray-700 hover:text-indigo-600" data-section="task-management">
+                        <i class="fas fa-tasks mr-3"></i>
+                        Task Management
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area flex-1 p-6 bg-gray-100">
+                <!-- Dashboard Home Section -->
+                <div id="dashboard-home" class="section active">
+                    <h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard Overview</h1>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow p-5">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-gray-500">Total Clients</p>
+                                    <h2 class="text-3xl font-bold text-gray-800" id="total-clients">-</h2>
+                                </div>
+                                <div class="bg-indigo-100 p-3 rounded-full">
+                                    <i class="fas fa-users text-indigo-600"></i>
+                                </div>
+                            </div>
+                            <p class="text-green-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> <span id="client-growth">-</span>% increase</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow p-5">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-gray-500">Monthly Revenue</p>
+                                    <h2 class="text-3xl font-bold text-gray-800" id="monthly-revenue">-</h2>
+                                </div>
+                                <div class="bg-green-100 p-3 rounded-full">
+                                    <i class="fas fa-dollar-sign text-green-600"></i>
+                                </div>
+                            </div>
+                            <p class="text-green-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> <span id="revenue-growth">-</span>% increase</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow p-5">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-gray-500">Pending Tasks</p>
+                                    <h2 class="text-3xl font-bold text-gray-800" id="pending-tasks">-</h2>
+                                </div>
+                                <div class="bg-yellow-100 p-3 rounded-full">
+                                    <i class="fas fa-tasks text-yellow-600"></i>
+                                </div>
+                            </div>
+                            <p class="text-red-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> <span id="tasks-growth">-</span>% increase</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow p-5">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-gray-500">Expenses (MTD)</p>
+                                    <h2 class="text-3xl font-bold text-gray-800" id="expenses-mtd">-</h2>
+                                </div>
+                                <div class="bg-red-100 p-3 rounded-full">
+                                    <i class="fas fa-file-invoice-dollar text-red-600"></i>
+                                </div>
+                            </div>
+                            <p class="text-yellow-500 text-sm mt-2"><i class="fas fa-minus"></i> <span id="expenses-growth">-</span>% steady</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <!-- Quick Access Cards -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4">Quick Actions</h3>
+                            
+                            <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+                                <a href="#" class="card flex flex-col items-center justify-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100" data-section="client-management" id="add-client-quick">
+                                    <i class="fas fa-user-plus text-2xl text-blue-600 mb-2"></i>
+                                    <span class="text-sm font-medium text-gray-800">Add New Client</span>
+                                </a>
+                                
+                                <a href="#" class="card flex flex-col items-center justify-center p-4 bg-green-50 rounded-lg hover:bg-green-100" data-section="finance-tracker" id="add-expense-quick">
+                                    <i class="fas fa-file-invoice text-2xl text-green-600 mb-2"></i>
+                                    <span class="text-sm font-medium text-gray-800">Submit Expense</span>
+                                </a>
+                                
+                                <a href="#" class="card flex flex-col items-center justify-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100" data-section="task-management" id="add-task-quick">
+                                    <i class="fas fa-clipboard-list text-2xl text-purple-600 mb-2"></i>
+                                    <span class="text-sm font-medium text-gray-800">Create Task</span>
+                                </a>
+                                
+                                <a href="#" class="card flex flex-col items-center justify-center p-4 bg-orange-50 rounded-lg hover:bg-orange-100" data-section="user-management" id="manage-users-quick">
+                                    <i class="fas fa-user-cog text-2xl text-orange-600 mb-2"></i>
+                                    <span class="text-sm font-medium text-gray-800">Manage Users</span>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Activities -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4">Recent Activities</h3>
+                            
+                            <div class="space-y-4" id="recent-activities">
+                                <!-- Activities will be populated dynamically -->
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 bg-gray-100 rounded-full p-2">
+                                        <i class="fas fa-spinner fa-spin text-gray-500"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm font-medium text-gray-800">Loading activities...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Clients & Tasks Row -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <!-- Recent Clients -->
+                        <div class="bg-white rounded-lg shadow overflow-hidden">
+                            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-lg font-bold text-gray-800">Recent Clients</h3>
+                                    <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800" data-section="client-management">View All</a>
+                                </div>
+                            </div>
+                            <div class="px-6 py-4">
+                                <table class="min-w-full">
+                                    <thead>
+                                        <tr>
+                                            <th>Client</th>
+                                            <th>Status</th>
+                                            <th>Subscription</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-clients">
+                                        <!-- Clients will be populated dynamically -->
+                                        <tr>
+                                            <td colspan="3" class="text-center py-4">
+                                                <i class="fas fa-spinner fa-spin mr-2"></i> Loading clients...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Upcoming Tasks -->
+                        <div class="bg-white rounded-lg shadow overflow-hidden">
+                            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-lg font-bold text-gray-800">Upcoming Tasks</h3>
+                                    <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800" data-section="task-management">View All</a>
+                                </div>
+                            </div>
+                            <div class="px-6 py-4">
+                                <div class="space-y-4" id="upcoming-tasks">
+                                    <!-- Tasks will be populated dynamically -->
+                                    <div class="flex items-center justify-center py-4">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i> Loading tasks...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Management Section -->
+                <div id="user-management" class="section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-2xl font-bold text-gray-800">User Management</h1>
+                        <button class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" id="add-user-btn">
+                            <i class="fas fa-plus mr-2"></i>Add User
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-lg font-semibold text-gray-800">User Accounts</h2>
+                                <div class="flex items-center">
+                                    <input type="text" placeholder="Search users..." class="px-3 py-2 border border-gray-300 rounded-md mr-2" id="user-search">
+                                    <select class="px-3 py-2 border border-gray-300 rounded-md" id="user-role-filter">
+                                        <option value="">All Roles</option>
+                                        <option value="admin">Admin</option>
+                                        <option value="manager">Manager</option>
+                                        <option value="employee">Employee</option>
+                                        <option value="finance">Finance Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Last Login</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table">
+                                    <!-- Users will be populated dynamically -->
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">
+                                            <i class="fas fa-spinner fa-spin mr-2"></i> Loading users...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="px-6 py-4 border-t border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600" id="users-count">Loading users...</span>
+                                <div class="flex space-x-2" id="users-pagination">
+                                    <!-- Pagination will be populated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Role Management Section -->
+                    <div class="mt-8">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4">Role Permissions</h2>
+                        <div class="bg-white rounded-lg shadow overflow-hidden">
+                            <table class="min-w-full">
+                                <thead>
+                                    <tr>
+                                        <th>Permission</th>
+                                        <th class="text-center">Administrator</th>
+                                        <th class="text-center">Manager</th>
+                                        <th class="text-center">Employee</th>
+                                        <th class="text-center">Finance Admin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>User Management</td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Client Management (Full)</td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Client Management (Assigned Only)</td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Finance Approval</td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Finance Reimbursement</td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Submit Expenses</td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Task Assignment</td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>System Configuration</td>
+                                        <td class="text-center"><i class="fas fa-check text-green-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                        <td class="text-center"><i class="fas fa-times text-red-500"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finance Tracker Section -->
+                <div id="finance-tracker" class="section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-2xl font-bold text-gray-800">Finance Tracker</h1>
+                        <button class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" id="add-expense-btn">
+                            <i class="fas fa-plus mr-2"></i>Submit Expense
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow p-5">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-gray-500">Total Expenses (MTD)</p>
+                                    <h2 class="text-3xl font-bold text-gray-800" id="total-expenses-mtd">-</h2>
+                                </div>
+                                <div class="bg-red-100 p-3 rounded-full">
+                                    <i class="fas fa-file-invoice-dollar text-red-600"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="flex justify-between text-sm">
+                                    <span>Budget: $7,500</span>
+                                    <span id="budget-percentage">0%</span>
+                                </div>
+                                <div class="progress mt-1">
+                                    <div class="progress-bar bg-green-500" id="budget-progress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow p-5">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-gray-500">Pending Approval</p>
+                                    <h2 class="text-3xl font-bold text-gray-800" id="pending-approval">-</h2>
+                                </div>
+                                <div class="bg-yellow-100 p-3 rounded-full">
+                                    <i class="fas fa-clock text-yellow-600"></i>
+                                </div>
+                            </div>
+                            <p class="text-yellow-500 text-sm mt-2"><i class="fas fa-exclamation-circle"></i> <span id="pending-count">-</span> expenses awaiting review</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow p-5">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-gray-500">Reimbursed (MTD)</p>
+                                    <h2 class="text-3xl font-bold text-gray-800" id="reimbursed-mtd">-</h2>
+                                </div>
+                                <div class="bg-green-100 p-3 rounded-full">
+                                    <i class="fas fa-check-circle text-green-600"></i>
+                                </div>
+                            </div>
+                            <p class="text-green-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> <span id="reimbursed-growth">-</span>% more than last month</p>
+                        </div>
+                    </div>
+
+                    <!-- Expense List -->
+                    <div class="bg-white rounded-lg shadow overflow-hidden mb-8">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-lg font-semibold text-gray-800">Expense Tracking</h2>
+                                <div class="flex items-center">
+                                    <input type="text" placeholder="Search expenses..." class="px-3 py-2 border border-gray-300 rounded-md mr-2" id="expense-search">
+                                    <select class="px-3 py-2 border border-gray-300 rounded-md mr-2" id="client-status-filter">
+                                        <option value="">All Statuses</option>
+                                        <option value="active">Active</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                    <select class="px-3 py-2 border border-gray-300 rounded-md" id="client-sort">
+                                        <option value="newest">Newest First</option>
+                                        <option value="alphabetical">Alphabetical</option>
+                                        <option value="subscription">Subscription Value</option>
+                                    </select>2" id="expense-status-filter">
+                                        <option value="">All Statuses</option>
+                                        <option value="submitted">Submitted</option>
+                                        <option value="approved">Approved</option>
+                                        <option value="rejected">Rejected</option>
+                                        <option value="reimbursed">Reimbursed</option>
+                                    </select>
+                                    <button class="px-3 py-2 bg-gray-200 rounded-md hover:bg-gray-300" id="export-expenses-csv">
+                                        <i class="fas fa-download mr-1"></i> Export CSV
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Amount</th>
+                                        <th>Submitted By</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expenses-table">
+                                    <!-- Expenses will be populated dynamically -->
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4">
+                                            <i class="fas fa-spinner fa-spin mr-2"></i> Loading expenses...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="px-6 py-4 border-t border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600" id="expenses-count">Loading expenses...</span>
+                                <div class="flex space-x-2" id="expenses-pagination">
+                                    <!-- Pagination will be populated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expense Categories Chart -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4">Expense Categories</h3>
+                            <div class="space-y-4" id="expense-categories">
+                                <!-- Expense categories will be populated dynamically -->
+                                <div class="flex items-center justify-center py-4">
+                                    <i class="fas fa-spinner fa-spin mr-2"></i> Loading categories...
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Expense Trends -->
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4">Monthly Expense Trends</h3>
+                            <div class="flex items-center justify-center h-64" id="expense-chart">
+                                <p class="text-gray-500 text-center">
+                                    <i class="fas fa-chart-line text-4xl mb-4 block"></i>
+                                    Chart visualization would appear here.<br>
+                                    Monthly expense trends over the past 6 months.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Client Management Section -->
+                <div id="client-management" class="section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-2xl font-bold text-gray-800">Client Management</h1>
+                        <button class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" id="add-client-btn">
+                            <i class="fas fa-plus mr-2"></i>Add Client
+                        </button>
+                    </div>
+
+                    <!-- Client Directory -->
+<div class="bg-white rounded-lg shadow overflow-hidden mb-8">
+    <div class="px-6 py-4 border-b border-gray-200">
+        <div class="flex justify-between items-center">
+            <h2 class="text-lg font-semibold text-gray-800">Client Directory</h2>
+            <div class="flex items-center">
+                <input type="text" placeholder="Search clients..." class="px-3 py-2 border border-gray-300 rounded-md mr-2" id="client-search">
+                <select class="px-3 py-2 border border-gray-300 rounded-md mr-2" id="client-status-filter">
+                    <option value="">All Statuses</option>
+                    <option value="active">Active</option>
+                    <option value="pending">Pending</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+                <select class="px-3 py-2 border border-gray-300 rounded-md" id="client-sort">
+                    <option value="newest">Newest First</option>
+                    <option value="alphabetical">Alphabetical</option>
+                    <option value="subscription">Subscription Value</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Service Plan</th>
+                    <th>Primary Contact</th>
+                    <th>Onboarded</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="clients-table">
+                <!-- Clients will be populated dynamically -->
+                <tr>
+                    <td colspan="7" class="text-center py-4">
+                        <i class="fas fa-spinner fa-spin mr-2"></i> Loading clients...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="px-6 py-4 border-t border-gray-200">
+        <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600" id="clients-count">Loading clients...</span>
+            <div class="flex space-x-2" id="clients-pagination">
+                <!-- Pagination will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Client Profile -->
+<div class="bg-white rounded-lg shadow overflow-hidden" id="client-profile-section">
+    <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-800">Client Profile</h2>
+        <p class="text-sm text-gray-500 mt-1">Select a client from the directory to view detailed information</p>
+    </div>
+    <div class="px-6 py-8" id="client-profile-content">
+        <div class="text-center py-10">
+            <i class="fas fa-building text-4xl text-gray-300 mb-3"></i>
+            <p class="text-gray-500">No client selected. Please click on a client in the directory to view their detailed profile.</p>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Task Management Section -->
+<div id="task-management" class="section">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Task Management</h1>
+        <button class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" id="add-task-btn">
+            <i class="fas fa-plus mr-2"></i>Add Task
+        </button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- My Tasks -->
+        <div class="col-span-2">
+            <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-lg font-semibold text-gray-800">My Tasks</h2>
+                        <div class="flex items-center">
+                            <input type="text" placeholder="Search tasks..." class="px-3 py-2 border border-gray-300 rounded-md mr-2" id="task-search">
+                            <select class="px-3 py-2 border border-gray-300 rounded-md" id="task-priority-filter">
+                                <option value="">All Priorities</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-6 py-4">
+                    <div class="space-y-4" id="my-tasks">
+                        <!-- Tasks will be populated dynamically -->
+                        <div class="flex items-center justify-center py-4">
+                            <i class="fas fa-spinner fa-spin mr-2"></i> Loading tasks...
+                        </div>
+                    </div>
+                </div>
+                <div class="px-6 py-4 border-t border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600" id="tasks-count">Loading tasks...</span>
+                        <div class="flex space-x-2" id="tasks-pagination">
+                            <!-- Pagination will be populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Summary & Assignees -->
+        <div class="col-span-1">
+            <!-- Task Statistics -->
+            <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Task Summary</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Overall Progress</span>
+                            <span id="task-completion-rate">-</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-green-500" id="task-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div class="bg-red-50 p-3 rounded-lg text-center">
+                            <p class="text-2xl font-bold text-red-600" id="high-priority-count">-</p>
+                            <p class="text-xs text-gray-700">High Priority</p>
+                        </div>
+                        <div class="bg-yellow-50 p-3 rounded-lg text-center">
+                            <p class="text-2xl font-bold text-yellow-600" id="medium-priority-count">-</p>
+                            <p class="text-xs text-gray-700">Medium Priority</p>
+                        </div>
+                        <div class="bg-blue-50 p-3 rounded-lg text-center">
+                            <p class="text-2xl font-bold text-blue-600" id="low-priority-count">-</p>
+                            <p class="text-xs text-gray-700">Low Priority</p>
+                        </div>
+                        <div class="bg-green-50 p-3 rounded-lg text-center">
+                            <p class="text-2xl font-bold text-green-600" id="completed-count">-</p>
+                            <p class="text-xs text-gray-700">Completed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task Assigned To Me -->
+            <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-gray-800">Assigned To Me</h3>
+                    <span class="badge badge-success" id="new-assignments-badge">-</span>
+                </div>
+                <div class="space-y-3" id="assigned-tasks">
+                    <!-- Assigned tasks will be populated dynamically -->
+                    <div class="flex items-center justify-center py-4">
+                        <i class="fas fa-spinner fa-spin mr-2"></i> Loading assignments...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task Calendar -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Upcoming Deadlines</h3>
+                <div class="space-y-3" id="upcoming-deadlines">
+                    <!-- Deadlines will be populated dynamically -->
+                    <div class="flex items-center justify-center py-4">
+                        <i class="fas fa-spinner fa-spin mr-2"></i> Loading deadlines...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Modals -->
+<!-- Add User Modal -->
+<div id="add-user-modal" class="modal">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Add New User</h2>
+            <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-user-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="add-user-form">
+            <div class="space-y-4">
+                <div>
+                    <label for="full-name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" id="full-name" name="full_name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="user-email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input type="email" id="user-email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="user-password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="user-password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="user-role-select" class="block text-sm font-medium text-gray-700">Role</label>
+                    <select id="user-role-select" name="role" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="admin">Administrator</option>
+                        <option value="manager">Manager</option>
+                        <option value="employee">Employee</option>
+                        <option value="finance">Finance Admin</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 close-modal" data-modal="add-user-modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                        Add User
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Expense Modal -->
+<div id="add-expense-modal" class="modal">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Submit Expense</h2>
+            <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-expense-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="add-expense-form">
+            <div class="space-y-4">
+                <div>
+                    <label for="expense-description" class="block text-sm font-medium text-gray-700">Description</label>
+                    <input type="text" id="expense-description" name="description" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="expense-amount" class="block text-sm font-medium text-gray-700">Amount</label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="text-gray-500 sm:text-sm">$</span>
+                        </div>
+                        <input type="number" step="0.01" id="expense-amount" name="amount" class="pl-7 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                </div>
+                <div>
+                    <label for="expense-date" class="block text-sm font-medium text-gray-700">Date</label>
+                    <input type="date" id="expense-date" name="date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="expense-category" class="block text-sm font-medium text-gray-700">Category</label>
+                    <select id="expense-category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="equipment">Equipment</option>
+                        <option value="travel">Travel</option>
+                        <option value="meals">Meals & Entertainment</option>
+                        <option value="software">Software</option>
+                        <option value="supplies">Supplies</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="expense-notes" class="block text-sm font-medium text-gray-700">Notes</label>
+                    <textarea id="expense-notes" name="notes" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                </div>
+                <div>
+                    <label for="expense-client" class="block text-sm font-medium text-gray-700">Related Client (Optional)</label>
+                    <select id="expense-client" name="client_id" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">None</option>
+                        <!-- Client options will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 close-modal" data-modal="add-expense-modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                        Submit Expense
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Client Modal -->
+<div id="add-client-modal" class="modal">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Add New Client</h2>
+            <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-client-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="add-client-form">
+            <div class="space-y-4">
+                <div>
+                    <label for="client-name" class="block text-sm font-medium text-gray-700">Company Name</label>
+                    <input type="text" id="client-name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="client-location" class="block text-sm font-medium text-gray-700">Location</label>
+                    <input type="text" id="client-location" name="location" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="client-status" class="block text-sm font-medium text-gray-700">Status</label>
+                    <select id="client-status" name="status" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="pending">Pending</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="client-plan" class="block text-sm font-medium text-gray-700">Service Plan</label>
+                    <select id="client-plan" name="service_plan" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="basic">Basic (150 Mbps)</option>
+                        <option value="standard">Standard (300 Mbps)</option>
+                        <option value="premium">Premium (500 Mbps)</option>
+                        <option value="enterprise">Enterprise (1 Gbps)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="client-notes" class="block text-sm font-medium text-gray-700">Notes</label>
+                    <textarea id="client-notes" name="notes" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 close-modal" data-modal="add-client-modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                        Add Client
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Task Modal -->
+<div id="add-task-modal" class="modal">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Add New Task</h2>
+            <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-task-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="add-task-form">
+            <div class="space-y-4">
+                <div>
+                    <label for="task-title" class="block text-sm font-medium text-gray-700">Task Title</label>
+                    <input type="text" id="task-title" name="title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="task-description" class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea id="task-description" name="description" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                </div>
+                <div>
+                    <label for="task-priority" class="block text-sm font-medium text-gray-700">Priority</label>
+                    <select id="task-priority" name="priority" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="task-due-date" class="block text-sm font-medium text-gray-700">Due Date</label>
+                    <input type="date" id="task-due-date" name="due_date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="task-category" class="block text-sm font-medium text-gray-700">Category</label>
+                    <select id="task-category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="meeting">Meeting</option>
+                        <option value="call">Call</option>
+                        <option value="documentation">Documentation</option>
+                        <option value="development">Development</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="task-assignee" class="block text-sm font-medium text-gray-700">Assign To</label>
+                    <select id="task-assignee" name="assignee_id" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">Myself</option>
+                        <!-- User options will be populated dynamically -->
+                    </select>
+                </div>
+                <div>
+                    <label for="task-client" class="block text-sm font-medium text-gray-700">Related Client (Optional)</label>
+                    <select id="task-client" name="client_id" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">None</option>
+                        <!-- Client options will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 close-modal" data-modal="add-task-modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                        Add Task
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Client Profile Modal -->
+<div id="client-detail-modal" class="modal">
+    <div class="modal-content max-w-4xl">
+        <!-- Content will be dynamically populated -->
+    </div>
+</div>
+
+<!-- Task Detail Modal -->
+<div id="task-detail-modal" class="modal">
+    <div class="modal-content max-w-2xl">
+        <!-- Content will be dynamically populated -->
+    </div>
+</div>
+
+<!-- Expense Detail Modal -->
+<div id="expense-detail-modal" class="modal">
+    <div class="modal-content max-w-2xl">
+        <!-- Content will be dynamically populated -->
+    </div>
+</div>
+
+<!-- Contact Modal -->
+<div id="add-contact-modal" class="modal">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Add Contact</h2>
+            <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-contact-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="add-contact-form">
+            <input type="hidden" id="contact-client-id" name="client_id">
+            <div class="space-y-4">
+                <div>
+                    <label for="contact-name" class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" id="contact-name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="contact-role" class="block text-sm font-medium text-gray-700">Role</label>
+                    <input type="text" id="contact-role" name="role" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="contact-department" class="block text-sm font-medium text-gray-700">Department</label>
+                    <input type="text" id="contact-department" name="department" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="contact-email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="contact-email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="contact-phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                    <input type="text" id="contact-phone" name="phone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="contact-preferred" class="block text-sm font-medium text-gray-700">Preferred Contact Method</label>
+                    <select id="contact-preferred" name="preferred_contact" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="email">Email</option>
+                        <option value="phone">Phone</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="contact-primary" name="is_primary" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                    <label for="contact-primary" class="ml-2 block text-sm text-gray-700">Primary Contact</label>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 close-modal" data-modal="add-contact-modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                        Save Contact
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Service History Modal -->
+<div id="add-service-history-modal" class="modal">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Add Service History Entry</h2>
+            <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-service-history-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="add-service-history-form">
+            <input type="hidden" id="service-history-client-id" name="client_id">
+            <div class="space-y-4">
+                <div>
+                    <label for="service-history-event-type" class="block text-sm font-medium text-gray-700">Event Type</label>
+                    <select id="service-history-event-type" name="event_type" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="initial_contact">Initial Contact</option>
+                        <option value="quotation_sent">Quotation Sent</option>
+                        <option value="installation">Installation</option>
+                        <option value="activation">Service Activation</option>
+                        <option value="issue">Service Issue</option>
+                        <option value="support">Support Contact</option>
+                        <option value="billing">Billing Discussion</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="service-history-date" class="block text-sm font-medium text-gray-700">Date</label>
+                    <input type="date" id="service-history-date" name="event_date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="service-history-description" class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea id="service-history-description" name="description" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                </div>
+                <div>
+                    <label for="service-history-communication" class="block text-sm font-medium text-gray-700">Communication Channel</label>
+                    <select id="service-history-communication" name="communication_channel" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="email">Email</option>
+                        <option value="phone">Phone</option>
+                        <option value="in-person">In-Person</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 close-modal" data-modal="add-service-history-modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                        Add Entry
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Technical Documentation Modal -->
+<div id="add-technical-doc-modal" class="modal">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Add Technical Documentation</h2>
+            <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-technical-doc-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="add-technical-doc-form">
+            <input type="hidden" id="technical-doc-client-id" name="client_id">
+            <div class="space-y-4">
+                <div>
+                    <label for="technical-doc-type" class="block text-sm font-medium text-gray-700">Document Type</label>
+                    <select id="technical-doc-type" name="doc_type" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="network_diagram">Network Diagram</option>
+                        <option value="device_inventory">Device Inventory</option>
+                        <option value="ip_addressing">IP Addressing</option>
+                        <option value="installation_notes">Installation Notes</option>
+                        <option value="maintenance_log">Maintenance Log</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="technical-doc-content" class="block text-sm font-medium text-gray-700">Content</label>
+                    <textarea id="technical-doc-content" name="content" rows="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 close-modal" data-modal="add-technical-doc-modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                        Save Documentation
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Quotation Modal -->
+<div id="add-quotation-modal" class="modal">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Add Quotation</h2>
+            <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-quotation-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="add-quotation-form">
+            <input type="hidden" id="quotation-client-id" name="client_id">
+            <div class="space-y-4">
+                <div>
+                    <label for="quotation-html" class="block text-sm font-medium text-gray-700">Quotation Content</label>
+                    <textarea id="quotation-html" name="html_content" rows="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                </div>
+                <div>
+                    <label for="quotation-status" class="block text-sm font-medium text-gray-700">Status</label>
+                    <select id="quotation-status" name="status" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="draft">Draft</option>
+                        <option value="sent">Sent</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 close-modal" data-modal="add-quotation-modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                        Save Quotation
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', path='/js/main.js') }}"></script>
+</body>
+</html>
